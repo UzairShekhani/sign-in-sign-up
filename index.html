@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>Sign in & Sign up Form</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="forms-container">
+        <div class="signin-signup">
+          <form action="#" class="sign-up-form">
+            <h2 class="title">Sign up</h2>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input id="username" type="text" placeholder="Username" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input
+                id="signup-email"
+                type="email"
+                placeholder="Email"
+                autocomplete="new-email"
+              />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input
+                id="signup-password"
+                type="password"
+                placeholder="Password"
+                autocomplete="new-password"
+              />
+            </div>
+            <button id="signup-btn" type="submit" class="btn">Sign UP</button>
+            <a id="skip">Skip for now</a>
+            <p class="social-text">Or Sign up with social platforms</p>
+            <div class="social-media">
+              <a href="#" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+          <form action="#" class="sign-in-form">
+            <h2 class="title">Sign in</h2>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input id="email" type="email" placeholder="Email" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input id="password" type="password" placeholder="Password" />
+            </div>
+            <button id="signin-btn" type="submit" class="btn solid">
+              Login
+            </button>
+            <a id="l-skip">Skip for now</a>
+
+            <p class="social-text">Or Sign in with social platforms</p>
+            <div class="social-media">
+              <a id="fb" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" id="twitter" class="social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" id="google" class="social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="#" id="linkedin" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content">
+            <h3>New here ?</h3>
+            <p>
+              Embarking on a journey with the click of 'New here,' where your
+              details become the brushstrokes of your digital identity. In this
+              virtual realm, let each keystroke be a signature, marking the
+              beginning of your unique presence.
+            </p>
+            <button class="btn transparent" id="sign-up-btn">Sign up</button>
+          </div>
+          <img src="img/log.svg" class="image" alt="" />
+        </div>
+        <div class="panel right-panel">
+          <div class="content">
+            <h3>One of us ?</h3>
+            <p>
+              Already one of us, your presence is a signature in this digital
+              landscape. From the first keystroke, your story began, and with
+              each click, you contribute to the evolving narrative of our shared
+              online community
+            </p>
+            <button class="btn transparent" id="sign-in-btn">Sign in</button>
+          </div>
+          <img src="img/register.svg" class="image" alt="" />
+        </div>
+      </div>
+    </div>
+    <script type="module">
+      const sign_in_btn = document.querySelector("#sign-in-btn");
+      const sign_up_btn = document.querySelector("#sign-up-btn");
+      const container = document.querySelector(".container");
+      const fb = document.getElementById("fb");
+      const tw = document.getElementById("twitter");
+      const gl = document.getElementById("google");
+      const ln = document.getElementById("linkedin");
+
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getDatabase,
+        set,
+        ref,
+        child,
+        get,
+        update,
+        remove,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        FacebookAuthProvider,
+        signInWithPopup,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBlpLk8NjMNvY3aFWvzTLp9uX_wVOX4TRY",
+        authDomain: "auth-blog-app-assignment.firebaseapp.com",
+        projectId: "auth-blog-app-assignment",
+        storageBucket: "auth-blog-app-assignment.appspot.com",
+        messagingSenderId: "939311478935",
+        appId: "1:939311478935:web:dc29fa6e41142a622651d2",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase();
+      const auth = getAuth(app);
+      const dbref = ref(db);
+      const provider = new FacebookAuthProvider();
+      let username = document.getElementById("username");
+      let signInForm = document.getElementById("signin-btn");
+      let signUpForm = document.querySelector(".sign-up-form");
+
+   // ... (previous code)
+
+let addData = () => {
+  // Assume user is authenticated and you have user.uid defined
+  const user = auth.currentUser;
+
+  set(ref(db, "UsersUid/" + user.uid), {
+    nameofuser: { name: username.value },
+    uid: user.uid,
+  })
+    .then(() => {
+      alert("Data Saved in firebase database");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+signUpForm.addEventListener("submit", addData);
+
+let RetData = () => {
+  const user = auth.currentUser;
+  const dbRef = ref(db, "UsersUid/" + user.uid);
+  get(dbRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      username.value = snapshot.val().nameofuser.name;
+    } else {
+      alert('Employee Does Not Exist');
+    }
+  });
+};
+   
+      let registerUser = (e) => {
+        e.preventDefault();
+
+        let signupEmail = document.getElementById("signup-email");
+        let signupPass = document.getElementById("signup-password");
+
+        createUserWithEmailAndPassword(
+          auth,
+          signupEmail.value,
+          signupPass.value
+        )
+          .then((credential) => {
+            console.log(credential);
+            alert("You're now one of us!");
+            container.classList.remove("sign-up-mode");
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      };
+      signUpForm.addEventListener("submit", registerUser);
+
+      let SignInUser = (e) => {
+        e.preventDefault();
+
+        let email = document.getElementById("email");
+        let password = document.getElementById("password");
+
+        signInWithEmailAndPassword(auth, email.value, password.value)
+          .then((credential) => {
+            console.log(credential);
+
+            window.location.replace("./dashboard.html");
+          })
+          .catch((error) => {
+            alert("Please Insert Correct Credential");
+          });
+      };
+      signInForm.addEventListener("click", SignInUser);
+
+      let fbbc = () => {
+        signInWithPopup(auth, provider)
+          .then((result) => {
+            const user = result.user;
+
+            const credential =
+              FacebookAuthProvider.credentialFromResult(result);
+            const accessToken = credential.accessToken;
+            console.log(accessToken);
+            alert(`Welcome ${user.displayName}`);
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const emaill = error.customData.email;
+            const credential = FacebookAuthProvider.credentialFromError(error);
+            console.log(error);
+            console.log(errorCode, errorMessage, emaill);
+          });
+      };
+      fb.addEventListener("click", fbbc);
+
+    </script>
+
+    <script src="app.js"></script>
+  </body>
+</html>
